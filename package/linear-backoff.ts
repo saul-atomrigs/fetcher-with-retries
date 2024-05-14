@@ -6,14 +6,19 @@ let attemptCounter = 0;
  * Increases wait time by a constant amount after each retry for predictable delays.
  */
 
-type OptionsProps = {
+export type OptionsProps = {
   url: string;
   retries: number;
   delay: number;
   increment: number;
 };
 
-const fetchData = async ({ url, retries, delay, increment }: OptionsProps) => {
+export const linearBackoff = async ({
+  url,
+  retries,
+  delay,
+  increment,
+}: OptionsProps) => {
   try {
     attemptCounter++;
     if (attemptCounter <= 3) {
@@ -24,7 +29,7 @@ const fetchData = async ({ url, retries, delay, increment }: OptionsProps) => {
   } catch (error) {
     if (retries > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
-      return fetchData({
+      return linearBackoff({
         url,
         retries: retries - 1,
         delay: delay + increment,
@@ -37,7 +42,7 @@ const fetchData = async ({ url, retries, delay, increment }: OptionsProps) => {
 };
 
 const url = 'https://jsonplaceholder.typicode.com/posts/1';
-fetchData({ url, retries: 3, delay: 1000, increment: 1000 }).catch(
+linearBackoff({ url, retries: 3, delay: 1000, increment: 1000 }).catch(
   console.error
 );
 

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let attemptCounter = 0;
 
-type OptionsProps = {
+export type OptionsProps = {
   url: string;
   retries: number;
   delay: number;
@@ -13,7 +13,11 @@ type OptionsProps = {
  * providing a balanced approach to managing retry intervals and allowing the system
  * some time to recover before the next attempt.
  */
-const fetchData = async ({ url, retries, delay }: OptionsProps) => {
+export const exponentialBackoff = async ({
+  url,
+  retries,
+  delay,
+}: OptionsProps) => {
   try {
     attemptCounter++;
     if (attemptCounter <= 2) {
@@ -24,7 +28,11 @@ const fetchData = async ({ url, retries, delay }: OptionsProps) => {
   } catch (error) {
     if (retries > 0) {
       await new Promise((resolve) => setTimeout(resolve, delay));
-      return fetchData({ url, retries: retries - 1, delay: delay * 2 });
+      return exponentialBackoff({
+        url,
+        retries: retries - 1,
+        delay: delay * 2,
+      });
     } else {
       throw new Error('All retries have failed');
     }
@@ -33,7 +41,7 @@ const fetchData = async ({ url, retries, delay }: OptionsProps) => {
 
 const url = 'https://jsonplaceholder.typicode.com/posts/1';
 
-fetchData({ url, retries: 3, delay: 1000 }).catch(console.error);
+exponentialBackoff({ url, retries: 3, delay: 1000 }).catch(console.error);
 
 /**
  * Output:

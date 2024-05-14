@@ -34,3 +34,10 @@ const fetchData = async ({ url, retries, delay }: OptionsProps) => {
 const url = 'https://jsonplaceholder.typicode.com/posts/1';
 
 fetchData({ url, retries: 3, delay: 1000 }).catch(console.error);
+
+/**
+ * Output:
+ * Attempt 1 failed with error: Simulated network failure. Waiting 1000 ms before retrying.
+ * Attempt 2 failed with error: Simulated network failure. Waiting 2000 ms before retrying.
+ * Success: 200
+ */

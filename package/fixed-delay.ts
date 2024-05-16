@@ -28,6 +28,8 @@ const fetchData = async ({ url, retries, delay }: OptionsProps) => {
   }
 };
 
+export default fetchData;
+
 const url = 'https://jsonplaceholder.typicode.com/posts/1';
 fetchData({ url, retries: 4, delay: 1000 }).catch(console.error);
 

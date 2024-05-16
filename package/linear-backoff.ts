@@ -13,7 +13,7 @@ export type OptionsProps = {
   increment: number;
 };
 
-export const linearBackoff = async ({
+const linearBackoff = async ({
   url,
   retries,
   delay,
@@ -40,6 +40,8 @@ export const linearBackoff = async ({
     }
   }
 };
+
+export default linearBackoff;
 
 const url = 'https://jsonplaceholder.typicode.com/posts/1';
 linearBackoff({ url, retries: 3, delay: 1000, increment: 1000 }).catch(

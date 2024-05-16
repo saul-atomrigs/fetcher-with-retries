@@ -13,11 +13,7 @@ export type OptionsProps = {
  * providing a balanced approach to managing retry intervals and allowing the system
  * some time to recover before the next attempt.
  */
-export const exponentialBackoff = async ({
-  url,
-  retries,
-  delay,
-}: OptionsProps) => {
+const exponentialBackoff = async ({ url, retries, delay }: OptionsProps) => {
   try {
     attemptCounter++;
     if (attemptCounter <= 2) {
@@ -38,6 +34,8 @@ export const exponentialBackoff = async ({
     }
   }
 };
+
+export default exponentialBackoff;
 
 const url = 'https://jsonplaceholder.typicode.com/posts/1';
 
